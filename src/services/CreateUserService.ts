@@ -1,6 +1,6 @@
 import Users from '../tables/Users'
 import modelUser from '../models/ModelUser'
-
+import Cars from '../tables/Cars'
 
 export default class CreateUserService {
 
@@ -13,18 +13,23 @@ export default class CreateUserService {
             cpf: user.cpf,
             dataNasc: user.dataNasc,
             senha: password,
-    // veículo
+            saldo: 0
+        })
+        if(!newUser){
+            return "não foi possível criar o usuário"
+        }
+        
+        const newCar = await Cars.create({
+            idUser:newUser.id,
+            placa:user.placa,
+            modelo:user.modelo,
+            cor:user.cor,
+            ano:user.ano
+        })
 
-            placa: user.placa,
-            modelo: user.modelo,
-            cor: user.cor,
-            ano: user.ano,
-            tipo: user.tipo
-        })
-        .catch((err)=>{
-            throw new Error(err)
-        })
-        return newUser
+        const All = {newUser, newCar}
+
+        return All
 
         
     }

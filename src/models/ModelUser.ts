@@ -12,7 +12,6 @@ placa:string
 cor:string
 modelo:string
 ano:string
-tipo:string
 
 constructor({
     id,
@@ -26,9 +25,7 @@ constructor({
     placa,
     cor,
     modelo,
-    ano,
-    tipo,
-  
+    ano
     
 }:modelUser) {
   this.id = id
@@ -42,7 +39,7 @@ constructor({
   this.cor = placa;
   this.modelo = modelo;
   this.ano = ano;
-  this.tipo = tipo
+  this.cor = cor
 }
   }
   export default modelUser;

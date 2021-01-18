@@ -1,15 +1,13 @@
-import Cars from '../tables/Cars'
+import CarsEst from '../tables/CarsEst'
 
 export default class ShowCars {
     
-    public show(){
-        const AllCars = Cars.findAll()
-        .then((cars)=>{
-            return cars
-        })
-        .catch((err)=>{
-            throw new Error("Erro ao listar todos os carros estacionados"+ err)
-        })
+    public async show(){
+        const AllCars = await CarsEst.findAll()
+
+        if(!AllCars || AllCars.length == 0){
+            return "não há nenhum carro estacionado"
+        }
 
         return AllCars
     }

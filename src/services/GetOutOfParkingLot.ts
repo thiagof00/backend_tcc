@@ -1,12 +1,16 @@
-import Cars from '../tables/Cars'
+import carsEst from '../tables/CarsEst'
 
 
 
 
 export default class GetOut{
 
-    public execute(idOfUser:number){
-        const GetOutWithCar = Cars.destroy({where:{idUser:idOfUser}})
+    public async execute(idOfUser:number){
+        const GetOutWithCar = await carsEst.destroy({where:{id:idOfUser}})
+
+        if(GetOutWithCar == 0){
+            return "não há nenhum veículo com esse usuário estacionado"
+        }
 
         return GetOutWithCar
     }

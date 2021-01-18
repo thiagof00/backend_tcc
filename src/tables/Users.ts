@@ -1,7 +1,24 @@
-import { STRING, DATE, INTEGER, DataTypes} from 'sequelize'
+import { STRING, DATE, INTEGER, DataTypes, Model, Optional} from 'sequelize'
 import sequelize from './db'
-
-const Users = sequelize.define("users", {
+interface UserAttributes {
+    id?:number
+    nome?:string
+    sobrenome?: string
+    email?:string
+    senha?:string
+    cpf?:string
+    dataNasc?: Date,
+    saldo?: number
+    
+  }
+  
+  interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
+  
+  interface UserInstance
+    extends Model<UserAttributes, UserCreationAttributes>,
+      UserAttributes {}
+  
+const Users = sequelize.define<UserInstance>("users", {
     nome:{
         type: DataTypes.STRING,
         allowNull:false
@@ -11,7 +28,7 @@ const Users = sequelize.define("users", {
         allowNull:false
     },
     dataNasc:{
-        type: DATE,
+        type: STRING,
         allowNull:false
     },
     cpf:{
@@ -26,38 +43,11 @@ const Users = sequelize.define("users", {
     type: STRING,
     allowNull:false
     },
-    placa:{
-    type: STRING,
-    allowNull:false
-    },
-    modelo:{
-    type: STRING,
-    allowNull:false
-
-    },
-    cor:{
-    type: STRING,
-    allowNull:false
-
-    },
-    ano:{
-    type:STRING,
-    allowNull:false
-
-    },
-    tipo:{
-    type:STRING,
-    allowNull:false
-
-    },
-    idsupervisor:{
-        type:INTEGER,
-        defaultValue:0,
+    saldo:{
+        type: DataTypes.INTEGER,
+        allowNull:false
     }
-    
-
 })
-
 //Users.sync({force:true})
 
 export default Users

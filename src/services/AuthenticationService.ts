@@ -1,28 +1,36 @@
 import Users from '../tables/Users'
-import modelUser from '../models/ModelUser'
+import Supervisors from '../tables/supervisors'
 import { compare } from 'bcrypt'
 interface Request{
-    email:string
-    password:string
+    cpf:string
+    senha:string
 
 }
-interface Response{
-    user: modelUser
-}
-
 export default class AuthenticationService {
 
-    public  execute ({email, password}:Request){
+    public async execute ({cpf, senha}:Request){
         
-        const user =  Users.findOne({where: {email} })
+        const user = await Users.findOne({where:{cpf}})
 
         if(!user){
-            throw new Error("Incorrect email/password combination")
+           const supervisor = await Supervisors.findOne({where:{cpf}})
+
+           if(supervisor){
+            const passwordMatched = await compare(senha, supervisor.senha)
+
+            if(!passwordMatched){
+                return "CPF ou senha incorretos"
+            }
+            return supervisor
+           }
+           
+            return "Usuário não encontrado"
         }
+        const passwordMatched = await compare(senha, user.senha)
 
-        const passwordMatch = compare(password, user.senha)
-
-
+        if(!passwordMatched){
+            return "CPF ou senha incorretos"
+        }
 
         return user
 }
