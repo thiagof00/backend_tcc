@@ -1,5 +1,5 @@
 import { hash } from 'bcrypt'
-import { Router } from 'express'
+import { request, Router } from 'express'
 import CreateUserService from '../services/CreateUserService'
 import AuthenticationService from '../services/AuthenticationService'
 import ParkCar from '../services/ParkCarService'
@@ -8,8 +8,8 @@ import UpdateService from '../services/UpdateServices'
 import DeleteService from '../services/DeleteService'
 import ShowCarsForUser from '../services/ShowCarsForUser'
 import CreateVeicule from '../services/CreateVeicule'
-import CreateLoja from '../services/CreateLoja'
 import AddSaldo from '../services/AddSaldo'
+import NotifyUser from '../services/NotifyUser'
 
 const RoutesUsers = Router()
 
@@ -57,9 +57,8 @@ RoutesUsers.post('/cars', async(request, response)=>{
 RoutesUsers.post("/auth", async (request, response)=>{
     const {cpf, senha} = request.body
     const auth = new AuthenticationService()
-    console.log(senha)
 
-   const userAuth = await auth.execute({cpf, senha})
+    const userAuth = await auth.execute({cpf, senha})
 
    response.json(userAuth)
 })
@@ -73,6 +72,17 @@ RoutesUsers.get('/getcars/:id', async(request, response)=>{
     const ShowCars = await CarsId.execute(Number(id))
     
     response.json(ShowCars)
+    
+})
+RoutesUsers.get('/getparked/:id', async(request, response)=>{
+
+    const {id} = request.params
+
+    const CarsId = new ShowCarsForUser
+
+    const ShowParked = await CarsId.parked(Number(id))
+    
+    response.json(ShowParked)
     
 })
 // adicionar saldo
@@ -117,6 +127,8 @@ RoutesUsers.post("/park", async (request, response)=>{
 RoutesUsers.get("/getout/:id", async(request, response)=>{
 
     const {id} = request.params
+
+    console.log(id)
     const getOut = new GetOut()
     const GetOutForPark =  await getOut.execute(Number(id))
 
@@ -133,18 +145,17 @@ RoutesUsers.get("/getout/:id", async(request, response)=>{
 //     const userForUpdate = updateService.push(idUser)
     
 // })
+// push das notificações
+RoutesUsers.get("/pushcarwithnotifications/:id", async(request, response)=>{
 
-//update
-RoutesUsers.post("/updateuser", (request, response)=>{
+    const {id} = request.params
+    const notifyUser = new NotifyUser()
 
-    const updateUser = request.body
-    const updateService = new UpdateService()
+    const pushCars = await notifyUser.pushNotifyAndFines(Number(id))
 
-    const userForUpdate = updateService.execute(updateUser)
-    userForUpdate.then((user)=>{
-        response.json(user)
-    })
+    response.json(pushCars)
 })
+
 //deletar usuário
 RoutesUsers.delete("/deleteuser/:id", (request, response)=>{
 
@@ -158,5 +169,29 @@ RoutesUsers.delete("/deleteuser/:id", (request, response)=>{
         response.json(err)
     })
 })
+
+//deletar carro 
+RoutesUsers.delete("/deletecar/:id", async(request, response)=>{
+
+    const {id} = request.params
+    const deleteService = new DeleteService()
+
+    const dlt = await deleteService.DeleteCar(Number(id))
+
+    response.json(dlt)
+})
+
+//update carros
+RoutesUsers.post("/updatecar", async(request, response)=>{
+
+    const car = request.body
+
+    const updateService = new UpdateService()
+
+    const update = await updateService.UpdateCar(car)
+
+    response.json(update)
+})
+
 
 export default RoutesUsers

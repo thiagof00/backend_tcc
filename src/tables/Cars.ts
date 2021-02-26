@@ -1,29 +1,38 @@
-import { INTEGER, STRING, Optional, Model } from 'sequelize'
+import { INTEGER, STRING, Optional, Model, BOOLEAN } from 'sequelize'
 import sequelize from './db'
 interface CarsAttributes {
     id?: number;
-    idUser: number
+    idUser?: number
 
-    placa: string
+    placa?: string
     
-    modelo: string
+    modelo?: string
     
-    cor: string
+    cor?: string
     
-    ano: string
+    ano?: string
+
+    estacionado?: boolean;
+
+    latitude?: string;
+
+    longitude?: string;
+
+    tempo?: string;
+
+    notf?: number;
+
     
   }
   
   interface CarsCreateationProps extends Optional<CarsAttributes, "id"> {}
-  
   interface CarsInstance
     extends Model<CarsAttributes, CarsCreateationProps>,
       CarsAttributes {}
  
 const Cars = sequelize.define<CarsInstance>('cars', {
     idUser:{
-        type:INTEGER,
-        allowNull:false
+        type:INTEGER
     },
     placa:{
     type: STRING,
@@ -43,7 +52,24 @@ const Cars = sequelize.define<CarsInstance>('cars', {
     type:STRING,
     allowNull:false
 
-    }
+    },
+    estacionado:{
+      type: BOOLEAN,
+      defaultValue: false
+    },
+    latitude:{
+      type:STRING,
+  },
+  longitude:{
+      type:STRING,
+  },
+  tempo: {
+      type: STRING
+      },
+  notf:{
+      type:INTEGER,
+      defaultValue: 0
+  }
 })
 
 //Cars.sync({force: true})

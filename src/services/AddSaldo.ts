@@ -11,7 +11,7 @@ export default class AddSaldo{
         if(!findUser){
             return "o usuário não foi encontrado, tente deslogar e voltar a aplicação"
         }
-    const response = await Users.increment({saldo: saldo},{where:{id:userId}})
+    const response = await Users.increment('saldo',{where:{id:userId},by: saldo})
         
         if(!response){
             return "não foi possível realizar a adição de saldo"

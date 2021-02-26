@@ -1,7 +1,24 @@
-import { STRING, DATE, INTEGER, DataTypes} from 'sequelize'
+import { STRING, DATE, INTEGER, DataTypes, Model, Optional} from 'sequelize'
 import sequelize from './db'
 
-const Supervisors = sequelize.define("supervisors", {
+interface SupAttributes {
+    id?:number
+    nome?:string
+    sobrenome?: string
+    email?:string
+    senha?:string
+    cpf?:string
+    local?: string
+    
+  }
+  interface SupCreationAttributes extends Optional<SupAttributes, "id"> {}
+  
+  interface SupInstance
+    extends Model<SupAttributes, SupCreationAttributes>,
+      SupAttributes {}
+
+
+const Supervisors = sequelize.define<SupInstance>("supervisors", {
     nome:{
         type: DataTypes.STRING,
         allowNull:false

@@ -13,4 +13,13 @@ export default class ShowCarsForUser {
 
         return cars
     }
+    public async parked(id:number){
+        const car = await Cars.findOne({where:{idUser:id, estacionado:true}})
+
+        if(!car){
+            return "não está estacionado"
+        }
+
+        return car
+    }
 }

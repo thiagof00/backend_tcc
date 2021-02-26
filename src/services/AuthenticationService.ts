@@ -21,7 +21,7 @@ export default class AuthenticationService {
             if(!passwordMatched){
                 return "CPF ou senha incorretos"
             }
-            return supervisor
+            return {sup:supervisor}
            }
            
             return "Usuário não encontrado"
@@ -31,7 +31,6 @@ export default class AuthenticationService {
         if(!passwordMatched){
             return "CPF ou senha incorretos"
         }
-
         return user
 }
 

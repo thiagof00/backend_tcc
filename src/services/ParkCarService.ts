@@ -11,6 +11,30 @@ interface Request{
     valueTime:number;
 
 }
+interface CarsAttributes {
+    id?: number;
+    idUser?: number
+
+    placa?: string
+    
+    modelo?: string
+    
+    cor?: string
+    
+    ano?: string
+
+    estacionado?: boolean;
+
+    latitude?: string;
+
+    longitude?: string;
+
+    tempo?: string;
+
+    notf?: number;
+
+    
+  }
 
 export default class ParkCar {
 
@@ -42,21 +66,17 @@ export default class ParkCar {
             return "não foi possivel descontar o valor do saldo do usuário"
         }
 
-        const parkedCar = await carsEst.create({
-            id: findedUser.id,
-            placa:findedCar.placa,
-            ano:findedCar.ano,
-            cor:findedCar.cor,
-            latitude,
-            longitude,
-            modelo:findedCar.modelo,
-            tempo
-        })
+        const parkedCar = await Cars.update({latitude, longitude, tempo, estacionado: true},{fields: ['latitude', 'longitude', 'tempo', 'estacionado'], where:{placa}})
 
-        if(!parkedCar){
+        if(parkedCar[0] < 1 || !parkedCar){
             return "não foi possivel estacionar"
         }
+        const findCarParked = await Cars.findOne({where:{placa, estacionado:true}})
 
-        return parkedCar
+        if(!findCarParked){
+            return "Houve um erro ao estacionar"
+        }
+
+        return {car:findCarParked, user:decrementedUser}
     }
 }

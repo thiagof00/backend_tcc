@@ -7,7 +7,7 @@ export default class CreateVeicule {
 
         const findedCar = Cars.findOne({where: {placa: car.placa}})
 
-        if(findedCar){
+        if(findedCar == null){
             return "esse veículo já está no banco de dados"
         }
 

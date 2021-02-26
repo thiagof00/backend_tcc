@@ -1,30 +1,35 @@
-import Users from '../tables/Users'
-import modelUser from '../models/ModelUser'
+import Cars from '../tables/Cars'
+
+
+
+interface CarsProps{
+    placa:string
+     modelo:string
+      cor:string
+       ano:string
+        idUser:number
+}
 
 export default class UpdatesServices {
 
-    public push(id:number){
+    public async UpdateCar(car: CarsProps){
 
-        const Alldata = Users.findOne({where: {id} })
-        .then((user)=>{
-            return user
-        })
-        .catch((err)=>{
-            return err
-        })
+        const findCar = await Cars.findOne({where:{idUser: car.idUser}})
 
-        return Alldata
-    }
+        if(!findCar){
+            return "carro não encontrado"
+        }
+        let placa = car.placa
+        let modelo = car.modelo
+        let cor = car.cor
+        let ano = car.ano
 
-    public execute(user:modelUser){
-        const UpdateUser = Users.update(user, {where:{id:user.id}})
-        .then((user)=>{
-            return user
-        })
-        .catch((err)=>{
-            return err
-        })
+        const updateCar = await findCar.update({placa, modelo, cor, ano}, {fields: ['placa', 'modelo', 'cor', 'ano']})
 
-        return UpdateUser
+        if(!updateCar){
+            return "não foi possível atualizar o carro"
+        }
+
+        return updateCar
     }
 }
