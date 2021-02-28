@@ -31,7 +31,7 @@ export default class AuthenticationService {
         if(!passwordMatched){
             return "CPF ou senha incorretos"
         }
-        return user
+        return {user:user}
 }
 
 }
